@@ -177,7 +177,7 @@ describe('getClientContext', () => {
     });
     const ctx = getClientContext(clientData);
     expect(ctx.jurisdiction).toBe('US');
-    expect(ctx.entityType).toBe('LLC');
+    expect(ctx.entityType).toBe('LIMITED_LIABILITY_COMPANY');
   });
 });
 
