@@ -412,9 +412,8 @@ describe('convertPartyResponseToFormValues', () => {
     const result = convertPartyResponseToFormValues(partyResponse);
     expect(result.countryOfResidence).toBe('US');
     // controllerIds should have issuer normalized to the countryOfResidence
-    if (result.controllerIds) {
-      expect(result.controllerIds[0]?.issuer).toBe('US');
-    }
+    expect(result.controllerIds).toBeDefined();
+    expect(result.controllerIds![0]?.issuer).toBe('US');
   });
 
   it('generates default controllerIds for US residents without IDs', () => {
@@ -430,10 +429,9 @@ describe('convertPartyResponseToFormValues', () => {
     };
 
     const result = convertPartyResponseToFormValues(partyResponse);
-    if (result.controllerIds) {
-      expect(result.controllerIds[0]?.idType).toBe('SSN');
-      expect(result.controllerIds[0]?.issuer).toBe('US');
-    }
+    expect(result.controllerIds).toBeDefined();
+    expect(result.controllerIds![0]?.idType).toBe('SSN');
+    expect(result.controllerIds![0]?.issuer).toBe('US');
   });
 
   it('generates default controllerIds with empty idType for non-US residents', () => {
@@ -449,10 +447,9 @@ describe('convertPartyResponseToFormValues', () => {
     };
 
     const result = convertPartyResponseToFormValues(partyResponse);
-    if (result.controllerIds) {
-      expect(result.controllerIds[0]?.idType).toBe('');
-      expect(result.controllerIds[0]?.issuer).toBe('CA');
-    }
+    expect(result.controllerIds).toBeDefined();
+    expect(result.controllerIds![0]?.idType).toBe('');
+    expect(result.controllerIds![0]?.issuer).toBe('CA');
   });
 
   it('handles empty party response', () => {
