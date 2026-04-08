@@ -4,7 +4,7 @@ import type { ApiErrorV2 } from '@/api/generated/ep-transactions.schemas';
 import {
   getErrorMessageFromContext,
   parseTransactionError,
-} from './PaymentFlow.utils';
+} from './parseTransactionError';
 
 describe('getErrorMessageFromContext', () => {
   it('returns null for empty context', () => {

@@ -40,7 +40,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 
 import { useInterceptorStatus } from '../EBComponentsProvider/EBComponentsProvider';
-import { parseTransactionError } from './PaymentFlow.utils';
+import { parseTransactionError } from './utils';
 import { useRecipientForm } from '../RecipientWidgets/hooks';
 import { RadioIndicator } from './components/RadioIndicator';
 import { FlowContainer, FlowView, useFlowContext } from './FlowContainer';
