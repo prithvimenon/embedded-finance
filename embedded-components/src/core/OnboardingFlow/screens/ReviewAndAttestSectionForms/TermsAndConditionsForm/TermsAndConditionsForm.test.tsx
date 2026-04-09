@@ -265,7 +265,7 @@ describe('TermsAndConditionsForm', () => {
           btn.textContent?.includes('TERMS')
       );
     // There should be at least one document button
-    expect(documentButtons.length).toBeGreaterThanOrEqual(0);
+    expect(documentButtons.length).toBeGreaterThan(0);
   });
 
   test('hides previous button when getPrevButtonLabel returns null', () => {

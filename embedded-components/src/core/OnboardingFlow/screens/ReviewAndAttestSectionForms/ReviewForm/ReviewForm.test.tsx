@@ -240,23 +240,12 @@ describe('ReviewForm', () => {
     expect(hiddenPrevButton).toBeTruthy();
   });
 
-  test('renders accordion sections for review', () => {
-    renderComponent();
-
-    // The form should contain accordion items
-    const form = document.querySelector('form');
-    expect(form).toBeTruthy();
-  });
-
-  test('renders form element for review', () => {
+  test('renders form with accordion sections for review', () => {
     renderComponent();
 
     // The form element should be present
-    expect(document.querySelector('form')).toBeTruthy();
-  });
-
-  test('renders section accordion items for review', () => {
-    renderComponent();
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
 
     // The review form should contain accordion trigger elements
     const accordionTriggers = document.querySelectorAll(
