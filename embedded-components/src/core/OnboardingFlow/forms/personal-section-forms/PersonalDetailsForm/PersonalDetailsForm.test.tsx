@@ -33,7 +33,10 @@ const renderForm = (
 
   (
     FlowContextModule.useFlowContext as ReturnType<typeof vi.fn>
-  ).mockReturnValue(mockFlowContext);
+  ).mockReturnValue({
+    ...mockFlowContext,
+    currentScreenId: 'personal-section',
+  });
 
   const Wrapper = ({ children }: { children: ReactNode }) => {
     const schema = usePersonalDetailsFormSchema();
