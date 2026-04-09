@@ -289,7 +289,7 @@ describe('ReviewForm', () => {
     const backButtons = buttons.filter((b) =>
       b.classList.contains('eb-hidden')
     );
-    expect(backButtons.length).toBeGreaterThanOrEqual(0);
+    expect(backButtons.length).toBeGreaterThanOrEqual(1);
   });
 
   test('renders accordion section headers', () => {

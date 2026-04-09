@@ -68,6 +68,35 @@ function renderGateway(
 ) {
   server.resetHandlers();
 
+  // Mock POST /clients
+  server.use(
+    http.post('*/clients', () => {
+      return HttpResponse.json({
+        id: 'client-new',
+        status: 'NEW',
+        parties: [
+          {
+            id: 'party-1',
+            partyType: 'ORGANIZATION',
+            roles: ['CLIENT'],
+            organizationDetails: {
+              organizationName: 'PLACEHOLDER_ORG_NAME',
+              organizationType: 'LIMITED_LIABILITY_COMPANY',
+            },
+          },
+        ],
+        products: ['EMBEDDED_PAYMENTS'],
+        outstanding: {
+          partyIds: [],
+          partyRoles: [],
+          questionIds: [],
+          documentRequestIds: [],
+          attestationDocumentIds: [],
+        },
+      } as unknown as ClientResponse);
+    })
+  );
+
   (
     FlowContextModule.useFlowContext as ReturnType<typeof vi.fn>
   ).mockReturnValue({
@@ -101,35 +130,6 @@ describe('GatewayScreen', () => {
     vi.clearAllMocks();
     queryClient.clear();
     server.resetHandlers();
-
-    // Mock POST /clients
-    server.use(
-      http.post('*/clients', () => {
-        return HttpResponse.json({
-          id: 'client-new',
-          status: 'NEW',
-          parties: [
-            {
-              id: 'party-1',
-              partyType: 'ORGANIZATION',
-              roles: ['CLIENT'],
-              organizationDetails: {
-                organizationName: 'PLACEHOLDER_ORG_NAME',
-                organizationType: 'LIMITED_LIABILITY_COMPANY',
-              },
-            },
-          ],
-          products: ['EMBEDDED_PAYMENTS'],
-          outstanding: {
-            partyIds: [],
-            partyRoles: [],
-            questionIds: [],
-            documentRequestIds: [],
-            attestationDocumentIds: [],
-          },
-        } as unknown as ClientResponse);
-      })
-    );
   });
 
   test('renders the gateway screen with business type selection options', () => {
@@ -146,7 +146,7 @@ describe('GatewayScreen', () => {
     // The info alert should be present when hideGatewayInfoAlert is not set
     const closeButtons = screen.queryAllByRole('button', { name: /close/i });
     // There should be a close button for the info alert
-    expect(closeButtons.length).toBeGreaterThanOrEqual(0);
+    expect(closeButtons.length).toBeGreaterThanOrEqual(1);
   });
 
   test('hides info alert when hideGatewayInfoAlert is true in session data', () => {
