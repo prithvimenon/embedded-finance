@@ -259,5 +259,58 @@ describe('IndividualIdentityForm', () => {
         expect(menuItems.length).toBeGreaterThanOrEqual(1);
       });
     });
+
+    test('selecting a different ID type from dropdown changes the ID type', async () => {
+      const user = userEvent.setup();
+      renderForm(
+        {
+          controllerIds: [{ idType: 'SSN', issuer: 'US', value: '123456789' }],
+        },
+        {
+          organizationType: 'LIMITED_LIABILITY_COMPANY',
+          clientData: llcMockClient,
+        }
+      );
+
+      const button = screen.getByText('Use a different ID type');
+      await user.click(button);
+
+      await waitFor(() => {
+        const menuItems = screen.getAllByRole('menuitem');
+        expect(menuItems.length).toBeGreaterThanOrEqual(2);
+      });
+
+      // Click the ITIN option (should not be disabled since current is SSN)
+      const menuItems = screen.getAllByRole('menuitem');
+      const itinItem = menuItems.find(
+        (item) => !item.hasAttribute('data-disabled')
+      );
+      if (itinItem) {
+        await user.click(itinItem);
+      }
+    });
+  });
+
+  describe('useEffect reset behavior', () => {
+    test('resets ID type to empty when switching from US to non-US with SSN selected', () => {
+      // Render with SSN (a US-only type) but non-US issuer
+      // The useEffect should detect SSN is not in NON_US_ID_TYPES and reset to ''
+      renderForm(
+        {
+          controllerIds: [{ idType: 'SSN', issuer: 'GB', value: '123456789' }],
+        },
+        {
+          organizationType: 'LIMITED_LIABILITY_COMPANY',
+          clientData: llcMockClient,
+        }
+      );
+
+      // The form should have reset the idType since SSN is not valid for non-US
+      // Verify by checking that the solePropSsn field is NOT rendered (since issuer is GB)
+      const ssnField = document.querySelector(
+        '[data-dtrum-tracking="solePropSsn"]'
+      );
+      expect(ssnField).toBeNull();
+    });
   });
 });

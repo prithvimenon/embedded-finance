@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import * as FlowContextModule from '@/core/OnboardingFlow/contexts';
@@ -161,6 +162,63 @@ describe('IndustryForm', () => {
       expect(screen.getByText('541512')).toBeInTheDocument();
       expect(screen.getByText('Custom Programming')).toBeInTheDocument();
       expect(screen.getByText('Computer Systems Design')).toBeInTheDocument();
+    });
+
+    test('clicking a recommendation sets industry value and hides recommendations', async () => {
+      const user = userEvent.setup();
+      const mockSetShowRecommendations = vi.fn();
+      const { useIndustrySuggestions } = await import(
+        './useIndustrySuggestions'
+      );
+      (useIndustrySuggestions as ReturnType<typeof vi.fn>).mockReturnValue({
+        isFeatureFlagEnabled: true,
+        recommendations: [
+          { naicsCode: '541511', naicsDescription: 'Custom Programming' },
+        ],
+        showRecommendations: true,
+        showEmptyRecommendationWarning: false,
+        showRecommendationErrorWarning: false,
+        recommendationErrorMessage: '',
+        isPending: false,
+        handleSuggest: vi.fn(),
+        setShowRecommendations: mockSetShowRecommendations,
+      });
+
+      renderForm({ organizationDescription: 'A test business' });
+      const recButton = screen.getByText('Custom Programming').closest('button')!;
+      await user.click(recButton);
+
+      await waitFor(() => {
+        expect(mockSetShowRecommendations).toHaveBeenCalledWith(false);
+      });
+    });
+
+    test('does not call handleRecommendationClick when naicsCode is falsy', async () => {
+      const mockSetShowRecommendations = vi.fn();
+      const { useIndustrySuggestions } = await import(
+        './useIndustrySuggestions'
+      );
+      (useIndustrySuggestions as ReturnType<typeof vi.fn>).mockReturnValue({
+        isFeatureFlagEnabled: true,
+        recommendations: [
+          { naicsCode: '', naicsDescription: 'No code rec' },
+        ],
+        showRecommendations: true,
+        showEmptyRecommendationWarning: false,
+        showRecommendationErrorWarning: false,
+        recommendationErrorMessage: '',
+        isPending: false,
+        handleSuggest: vi.fn(),
+        setShowRecommendations: mockSetShowRecommendations,
+      });
+
+      const user = userEvent.setup();
+      renderForm({ organizationDescription: 'A test business' });
+      const recButton = screen.getByText('No code rec').closest('button')!;
+      await user.click(recButton);
+
+      // setShowRecommendations should NOT be called since naicsCode is falsy
+      expect(mockSetShowRecommendations).not.toHaveBeenCalled();
     });
 
     test('shows empty recommendation warning', async () => {
