@@ -99,12 +99,12 @@ describe('IndividualIdentityForm', () => {
       expect(inputs.length).toBeGreaterThanOrEqual(1);
     });
 
-    test('renders ID type select for non-US issuer', () => {
+    test('renders ID type select for non-US issuer', async () => {
       renderForm({
         controllerIds: [{ idType: '', issuer: 'GB', value: '' }],
       });
       // For non-US, should render a select for idType
-      waitFor(() => {
+      await waitFor(() => {
         const selects = document.querySelectorAll('[role="combobox"]');
         expect(selects.length).toBeGreaterThanOrEqual(1);
       });
