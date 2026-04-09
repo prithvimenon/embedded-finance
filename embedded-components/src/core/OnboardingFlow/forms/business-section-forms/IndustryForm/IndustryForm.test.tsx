@@ -96,13 +96,10 @@ describe('IndustryForm', () => {
 
     test('renders industry select field', () => {
       renderForm();
-      // The industrySelect type renders a custom component
-      // Look for combobox or a relevant input
-      const container = document.querySelector(
-        '[data-dtrum-tracking="industry"]'
-      );
-      // Industry field should be present in the DOM
-      expect(container !== null || screen.getByRole('textbox')).toBeTruthy();
+      // The industrySelect type renders a combobox for NAICS code selection
+      const comboboxes = screen.getAllByRole('combobox');
+      // Should have at least one combobox for industry selection
+      expect(comboboxes.length).toBeGreaterThanOrEqual(1);
     });
   });
 
