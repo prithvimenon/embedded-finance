@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import * as FlowContextModule from '@/core/OnboardingFlow/contexts';
 import type { OnboardingContextType } from '@/core/OnboardingFlow/contexts';
 import {
-  createLLCMockClient,
+  llcMockClient,
   createMockOnboardingContext,
   createTestQueryClient,
   mockFlowContext,
@@ -137,7 +137,7 @@ describe('BusinessIdentityForm', () => {
         { organizationName: 'Acme Corp' },
         {
           organizationType: 'LIMITED_LIABILITY_COMPANY',
-          clientData: createLLCMockClient,
+          clientData: llcMockClient,
         }
       );
       expect(screen.getByDisplayValue('Acme Corp')).toBeInTheDocument();

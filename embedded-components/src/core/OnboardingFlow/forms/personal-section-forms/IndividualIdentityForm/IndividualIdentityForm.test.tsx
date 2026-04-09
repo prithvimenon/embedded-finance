@@ -8,7 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import * as FlowContextModule from '@/core/OnboardingFlow/contexts';
 import type { OnboardingContextType } from '@/core/OnboardingFlow/contexts';
 import {
-  createLLCMockClient,
+  llcMockClient,
   createMockOnboardingContext,
   createTestQueryClient,
   mockFlowContext,
@@ -117,7 +117,7 @@ describe('IndividualIdentityForm', () => {
         },
         {
           organizationType: 'LIMITED_LIABILITY_COMPANY',
-          clientData: createLLCMockClient,
+          clientData: llcMockClient,
         }
       );
       const button = screen.queryByText('Use a different ID type');
@@ -131,7 +131,7 @@ describe('IndividualIdentityForm', () => {
         },
         {
           organizationType: 'LIMITED_LIABILITY_COMPANY',
-          clientData: createLLCMockClient,
+          clientData: llcMockClient,
         }
       );
       const button = screen.queryByText('Use a different ID type');
@@ -244,7 +244,7 @@ describe('IndividualIdentityForm', () => {
         },
         {
           organizationType: 'LIMITED_LIABILITY_COMPANY',
-          clientData: createLLCMockClient,
+          clientData: llcMockClient,
         }
       );
 

@@ -108,7 +108,7 @@ export const createMockOnboardingContext = (
 
 // ---- Client Factory ----
 
-export const createLLCMockClient: ClientResponse = {
+export const llcMockClient: ClientResponse = {
   ...mockClient,
   parties: mockClient.parties?.map((party) =>
     party?.partyType === 'ORGANIZATION'
