@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { StepConfig } from '@/core/OnboardingFlow/types/flow.types';
+
+import { StepsReviewCards } from './StepsReviewCards';
+
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
     clientData: {
@@ -51,8 +55,6 @@ vi.mock('@/i18n', () => ({
   }),
 }));
 
-import { StepsReviewCards } from './StepsReviewCards';
-
 describe('StepsReviewCards', () => {
   const mockOnEditClick = vi.fn();
 
@@ -65,7 +67,7 @@ describe('StepsReviewCards', () => {
         schema: { shape: { controllerFirstName: {} } },
       }),
     },
-  ];
+  ] as unknown as StepConfig[];
 
   it('renders without crashing', () => {
     render(
@@ -89,7 +91,7 @@ describe('StepsReviewCards', () => {
           schema: { shape: {} },
         }),
       },
-    ];
+    ] as unknown as StepConfig[];
     render(
       <StepsReviewCards
         steps={multipleSteps}
@@ -112,7 +114,7 @@ describe('StepsReviewCards', () => {
           schema: { shape: {} },
         }),
       },
-    ];
+    ] as unknown as StepConfig[];
     render(
       <StepsReviewCards
         steps={stepsWithCheckAnswers}

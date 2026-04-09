@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, it, vi } from 'vitest';
+
+import { BusinessIdentityForm } from './BusinessIdentityForm';
 
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
@@ -40,7 +42,8 @@ vi.mock('@/core/OnboardingFlow/utils/formUtils', () => ({
     }),
   }),
   useGetValidationMessage: () => (key: string) => `${key} is invalid`,
-  useGetFieldContentToken: () => (fieldName: string, tokenId: string) => `${fieldName}.${tokenId}`,
+  useGetFieldContentToken: () => (fieldName: string, tokenId: string) =>
+    `${fieldName}.${tokenId}`,
   convertPartyResponseToFormValues: () => ({}),
 }));
 
@@ -59,8 +62,6 @@ vi.mock('@/components/LearnMorePopover', () => ({
     <div>{children}</div>
   ),
 }));
-
-import { BusinessIdentityForm } from './BusinessIdentityForm';
 
 describe('BusinessIdentityForm', () => {
   const renderForm = () => {

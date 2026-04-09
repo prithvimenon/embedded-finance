@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { ReviewForm } from './ReviewForm';
+
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
     clientData: {
@@ -90,8 +92,6 @@ vi.mock('@/i18n', () => ({
   }),
 }));
 
-import { ReviewForm } from './ReviewForm';
-
 describe('ReviewForm', () => {
   const defaultProps = {
     handlePrev: vi.fn(),
@@ -114,11 +114,11 @@ describe('ReviewForm', () => {
 
   it('renders the attestation checkbox', () => {
     render(<ReviewForm {...defaultProps} />);
+    expect(screen.getByText(/Data accuracy attestation/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/Data accuracy attestation/i)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/The data I am providing is true, accurate and complete/i)
+      screen.getByText(
+        /The data I am providing is true, accurate and complete/i
+      )
     ).toBeInTheDocument();
   });
 
@@ -127,8 +127,6 @@ describe('ReviewForm', () => {
     expect(
       screen.getByRole('button', { name: /Previous/i })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /Submit/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Submit/i })).toBeInTheDocument();
   });
 });

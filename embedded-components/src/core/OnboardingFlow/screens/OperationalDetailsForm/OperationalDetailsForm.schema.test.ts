@@ -15,7 +15,7 @@ describe('createDynamicZodSchema', () => {
     const questions: QuestionResponse[] = [
       {
         id: '30001',
-        questionText: 'What is your business?',
+        description: 'What is your business?',
         responseSchema: {
           type: 'array',
           items: { type: 'string' },
@@ -33,7 +33,7 @@ describe('createDynamicZodSchema', () => {
     const questions: QuestionResponse[] = [
       {
         id: '30001',
-        questionText: 'What is your business?',
+        description: 'What is your business?',
         responseSchema: {
           type: 'array',
           items: { type: 'string' },
@@ -51,7 +51,7 @@ describe('createDynamicZodSchema', () => {
     const questions: QuestionResponse[] = [
       {
         id: '30002',
-        questionText: 'Is this a new business?',
+        description: 'Is this a new business?',
         responseSchema: {
           type: 'array',
           items: { type: 'boolean' },
@@ -69,7 +69,7 @@ describe('createDynamicZodSchema', () => {
     const questions: QuestionResponse[] = [
       {
         id: '30003',
-        questionText: 'Select category',
+        description: 'Select category',
         responseSchema: {
           type: 'array',
           items: { type: 'string', enum: ['RETAIL', 'WHOLESALE', 'SERVICE'] },
@@ -87,7 +87,7 @@ describe('createDynamicZodSchema', () => {
     const questions: QuestionResponse[] = [
       {
         id: '30004',
-        questionText: 'Number of employees',
+        description: 'Number of employees',
         responseSchema: {
           type: 'array',
           items: { type: 'integer' },

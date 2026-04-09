@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { StepConfig } from '@/core/OnboardingFlow/types/flow.types';
+
+import { StepperRenderer } from './StepperRenderer';
+
 // Mock all heavy dependencies
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
@@ -176,8 +180,6 @@ vi.mock('@tanstack/react-query', async (importOriginal) => {
   };
 });
 
-import { StepperRenderer } from './StepperRenderer';
-
 describe('StepperRenderer', () => {
   const mockSteps = [
     {
@@ -189,7 +191,7 @@ describe('StepperRenderer', () => {
         schema: () => ({}),
       }),
     },
-  ];
+  ] as unknown as StepConfig[];
 
   it('renders without crashing', () => {
     render(<StepperRenderer steps={mockSteps} />);

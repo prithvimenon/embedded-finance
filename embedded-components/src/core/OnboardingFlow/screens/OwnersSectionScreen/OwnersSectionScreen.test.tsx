@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { OwnersSectionScreen } from './OwnersSectionScreen';
+
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
     clientData: {
@@ -147,7 +149,8 @@ vi.mock('@/i18n', () => ({
     },
     tString: (key: string | string[]) => (Array.isArray(key) ? key[0] : key),
   }),
-  TransWithTokens: ({ children }: { children?: React.ReactNode }) => children ?? null,
+  TransWithTokens: ({ children }: { children?: React.ReactNode }) =>
+    children ?? null,
 }));
 
 vi.mock('@tanstack/react-query', async (importOriginal) => {
@@ -164,23 +167,14 @@ vi.mock('@/components/ServerErrorAlert', () => ({
   ServerErrorAlert: () => null,
 }));
 
-import { OwnersSectionScreen } from './OwnersSectionScreen';
-
 describe('OwnersSectionScreen', () => {
-  const defaultProps = {
-    handlePrev: vi.fn(),
-    handleNext: vi.fn(),
-    getPrevButtonLabel: () => 'Previous',
-    getNextButtonLabel: () => 'Continue',
-  };
-
   it('renders without crashing', () => {
-    render(<OwnersSectionScreen {...defaultProps} />);
+    render(<OwnersSectionScreen />);
     expect(document.querySelector('div')).toBeInTheDocument();
   });
 
   it('renders navigation buttons', () => {
-    render(<OwnersSectionScreen {...defaultProps} />);
+    render(<OwnersSectionScreen />);
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBeGreaterThan(0);
   });

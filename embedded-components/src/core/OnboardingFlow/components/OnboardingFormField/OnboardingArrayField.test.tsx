@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, it, vi } from 'vitest';
 
+import { OnboardingArrayField } from './OnboardingArrayField';
+
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
     clientData: {
@@ -38,8 +40,6 @@ vi.mock('@/i18n', () => ({
     tString: (key: string | string[]) => (Array.isArray(key) ? key[0] : key),
   }),
 }));
-
-import { OnboardingArrayField } from './OnboardingArrayField';
 
 describe('OnboardingArrayField', () => {
   it('renders items from the field array', () => {

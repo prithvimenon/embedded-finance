@@ -1,6 +1,8 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { useBusinessContactInfoFormSchema } from './BusinessContactInfoForm.schema';
+
 vi.mock('@/core/OnboardingFlow/utils/formUtils', async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   return {
@@ -8,8 +10,6 @@ vi.mock('@/core/OnboardingFlow/utils/formUtils', async (importOriginal) => {
     useGetValidationMessage: () => (key: string) => `${key} is invalid`,
   };
 });
-
-import { useBusinessContactInfoFormSchema } from './BusinessContactInfoForm.schema';
 
 describe('useBusinessContactInfoFormSchema', () => {
   it('returns a valid schema', () => {

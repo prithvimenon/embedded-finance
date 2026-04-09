@@ -49,7 +49,10 @@ describe('StepLayout', () => {
 
   it('renders headerElement when provided', () => {
     render(
-      <StepLayout title="Title" headerElement={<button>Action</button>} />
+      <StepLayout
+        title="Title"
+        headerElement={<button type="button">Action</button>}
+      />
     );
     expect(screen.getByText('Action')).toBeTruthy();
   });

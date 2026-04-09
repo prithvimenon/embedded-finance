@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { z } from 'zod';
 
 import type { PartyResponse } from '@/api/generated/smbdo.schemas';
 
@@ -8,7 +9,6 @@ import {
   getValueByPath,
   mapClientApiErrorsToFormErrors,
   mapPartyApiErrorsToFormErrors,
-  modifySchemaByClientContext,
   sanitizeServerErrorMessage,
   shapeFormValuesBySchema,
 } from './formUtils';
@@ -43,9 +43,7 @@ describe('getPartyFieldConfig', () => {
   });
 
   it('throws for an unmapped field name', () => {
-    expect(() =>
-      getPartyFieldConfig('nonExistentField' as any)
-    ).toThrow();
+    expect(() => getPartyFieldConfig('nonExistentField' as any)).toThrow();
   });
 });
 
@@ -81,9 +79,7 @@ describe('convertPartyResponseToFormValues', () => {
         firstName: 'Jane',
         lastName: 'Smith',
         countryOfResidence: 'CA',
-        individualIds: [
-          { idType: 'PASSPORT', issuer: 'US', value: 'P12345' },
-        ],
+        individualIds: [{ idType: 'PASSPORT', issuer: 'US', value: 'P12345' }],
       },
     } as PartyResponse;
 
@@ -155,9 +151,7 @@ describe('sanitizeServerErrorMessage', () => {
     const msg =
       'Field /individualDetails/addresses[0]/postalCode/ value must have the expected value. The postal code [00000] is invalid for the country [US].';
     const result = sanitizeServerErrorMessage(msg);
-    expect(result).toBe(
-      'The postal code 00000 is invalid for the country US.'
-    );
+    expect(result).toBe('The postal code 00000 is invalid for the country US.');
   });
 
   it('returns original message when no prefix found', () => {
@@ -180,9 +174,7 @@ describe('mapClientApiErrorsToFormErrors', () => {
   });
 
   it('handles unmatched errors gracefully', () => {
-    const errors = [
-      { field: '$.unknown.path', message: 'Unknown error' },
-    ];
+    const errors = [{ field: '$.unknown.path', message: 'Unknown error' }];
     const result = mapClientApiErrorsToFormErrors(errors, 0, 'parties');
     expect(result).toHaveLength(1);
     expect(result[0].field).toBeUndefined();
@@ -208,7 +200,6 @@ describe('mapPartyApiErrorsToFormErrors', () => {
 
 describe('shapeFormValuesBySchema', () => {
   it('returns only keys present in the schema', () => {
-    const { z } = require('zod');
     const schema = z.object({
       firstName: z.string(),
       lastName: z.string(),

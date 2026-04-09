@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { TermsAndConditionsForm } from './TermsAndConditionsForm';
+
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
     clientData: {
@@ -80,8 +82,6 @@ vi.mock('@/i18n', () => ({
 vi.mock('@/components/ServerErrorAlert', () => ({
   ServerErrorAlert: () => null,
 }));
-
-import { TermsAndConditionsForm } from './TermsAndConditionsForm';
 
 describe('TermsAndConditionsForm', () => {
   const defaultProps = {

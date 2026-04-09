@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, it, vi } from 'vitest';
 
+import { IndustryTypeSelect } from './IndustryTypeSelect';
+
 vi.mock('@/i18n', () => ({
   useTranslationWithTokens: () => ({
     t: (key: string | string[]) => (Array.isArray(key) ? key[0] : key),
@@ -25,8 +27,6 @@ vi.mock('react-window', () => ({
     </div>
   ),
 }));
-
-import { IndustryTypeSelect } from './IndustryTypeSelect';
 
 describe('IndustryTypeSelect', () => {
   it('renders the combobox trigger button', () => {

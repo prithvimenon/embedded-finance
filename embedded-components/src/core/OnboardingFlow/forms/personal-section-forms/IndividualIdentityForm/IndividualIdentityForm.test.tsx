@@ -2,6 +2,8 @@ import { render } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, it, vi } from 'vitest';
 
+import { IndividualIdentityForm } from './IndividualIdentityForm';
+
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
     clientData: {
@@ -30,7 +32,8 @@ vi.mock('@/core/OnboardingFlow/utils/formUtils', () => ({
     }),
   }),
   useGetValidationMessage: () => (key: string) => `${key} is invalid`,
-  useGetFieldContentToken: () => (fieldName: string, tokenId: string) => `${fieldName}.${tokenId}`,
+  useGetFieldContentToken: () => (fieldName: string, tokenId: string) =>
+    `${fieldName}.${tokenId}`,
 }));
 
 vi.mock('@/i18n', () => ({
@@ -48,8 +51,6 @@ vi.mock('@/components/LearnMorePopover', () => ({
     <div>{children}</div>
   ),
 }));
-
-import { IndividualIdentityForm } from './IndividualIdentityForm';
 
 describe('IndividualIdentityForm', () => {
   const renderForm = () => {

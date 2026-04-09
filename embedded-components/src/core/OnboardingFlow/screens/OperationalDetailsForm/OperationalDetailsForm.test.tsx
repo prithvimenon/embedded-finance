@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { OperationalDetailsForm } from './OperationalDetailsForm';
+
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
     clientData: {
@@ -85,28 +87,19 @@ vi.mock('@/components/ServerErrorAlert', () => ({
   ServerErrorAlert: () => null,
 }));
 
-import { OperationalDetailsForm } from './OperationalDetailsForm';
-
 describe('OperationalDetailsForm', () => {
-  const defaultProps = {
-    handlePrev: vi.fn(),
-    handleNext: vi.fn(),
-    getPrevButtonLabel: () => 'Previous',
-    getNextButtonLabel: () => 'Continue',
-  };
-
   it('renders without crashing', () => {
-    render(<OperationalDetailsForm {...defaultProps} />);
+    render(<OperationalDetailsForm />);
     expect(document.querySelector('div')).toBeInTheDocument();
   });
 
   it('renders the form element', () => {
-    render(<OperationalDetailsForm {...defaultProps} />);
+    render(<OperationalDetailsForm />);
     expect(document.querySelector('form')).toBeInTheDocument();
   });
 
   it('renders navigation buttons', () => {
-    render(<OperationalDetailsForm {...defaultProps} />);
+    render(<OperationalDetailsForm />);
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBeGreaterThan(0);
   });

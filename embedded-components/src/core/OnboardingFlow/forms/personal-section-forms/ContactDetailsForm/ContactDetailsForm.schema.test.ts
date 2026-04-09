@@ -1,16 +1,17 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { useContactDetailsFormSchema } from './ContactDetailsForm.schema';
+
 vi.mock('@/core/OnboardingFlow/utils/formUtils', async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   return {
     ...actual,
     useGetValidationMessage: () => (key: string) => `${key} is invalid`,
-    useGetFieldContentToken: () => (fieldName: string, tokenId: string) => `${fieldName}.${tokenId}`,
+    useGetFieldContentToken: () => (fieldName: string, tokenId: string) =>
+      `${fieldName}.${tokenId}`,
   };
 });
-
-import { useContactDetailsFormSchema } from './ContactDetailsForm.schema';
 
 describe('useContactDetailsFormSchema', () => {
   it('returns a valid schema', () => {

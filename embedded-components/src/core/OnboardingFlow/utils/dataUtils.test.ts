@@ -6,17 +6,17 @@ import type {
 } from '@/api/generated/smbdo.schemas';
 
 import {
+  clientHasOutstandingDocRequests,
+  convertClientToSoleProprietorship,
   formatQuestionResponse,
-  getAllOwners,
   getActiveOwners,
+  getAllOwners,
   getClientContext,
   getControllerParty,
   getInactiveOwners,
   getOrganizationParty,
   getPartyByAssociatedPartyFilters,
   getPartyName,
-  clientHasOutstandingDocRequests,
-  convertClientToSoleProprietorship,
 } from './dataUtils';
 
 const mockClientData: ClientResponse = {

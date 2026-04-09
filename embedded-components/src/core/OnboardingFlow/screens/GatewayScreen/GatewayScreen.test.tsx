@@ -1,5 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+
+import { GatewayScreen } from './GatewayScreen';
 
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
@@ -37,15 +39,20 @@ vi.mock('react-hook-form', async (importOriginal) => {
   return {
     ...actual,
     useFormState: () => ({ isDirty: false }),
-    FormProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    FormProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
   };
 });
 
-vi.mock('@/core/OnboardingFlow/components/OnboardingFormField/OnboardingFormField', () => ({
-  OnboardingFormField: ({ name }: { name: string }) => (
-    <div data-testid={`field-${name}`}>{name}</div>
-  ),
-}));
+vi.mock(
+  '@/core/OnboardingFlow/components/OnboardingFormField/OnboardingFormField',
+  () => ({
+    OnboardingFormField: ({ name }: { name: string }) => (
+      <div data-testid={`field-${name}`}>{name}</div>
+    ),
+  })
+);
 
 vi.mock('@/core/OnboardingFlow/utils/formUtils', () => ({
   useFormWithFilters: () => ({
@@ -151,8 +158,6 @@ vi.mock('@/components/LearnMorePopover', () => ({
 vi.mock('@/components/ServerErrorAlert', () => ({
   ServerErrorAlert: () => null,
 }));
-
-import { GatewayScreen } from './GatewayScreen';
 
 describe('GatewayScreen', () => {
   it('renders without crashing', () => {

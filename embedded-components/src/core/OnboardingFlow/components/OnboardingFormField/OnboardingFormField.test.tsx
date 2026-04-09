@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, it, vi } from 'vitest';
 
+import { OnboardingFormField } from './OnboardingFormField';
+
 vi.mock('@/core/OnboardingFlow/utils/formUtils', () => ({
   useFormUtils: () => ({
     getFieldRule: () => ({
@@ -33,9 +35,7 @@ vi.mock('@/components/LearnMorePopover', () => ({
   ),
 }));
 
-import { OnboardingFormField } from './OnboardingFormField';
-
-const Wrapper = ({
+const _Wrapper = ({
   children,
   defaultValues = {},
 }: {

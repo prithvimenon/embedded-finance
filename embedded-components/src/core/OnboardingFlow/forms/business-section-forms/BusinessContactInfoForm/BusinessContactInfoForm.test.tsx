@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, it, vi } from 'vitest';
+
+import { BusinessContactInfoForm } from './BusinessContactInfoForm';
 
 vi.mock('@/core/OnboardingFlow/contexts', () => ({
   useOnboardingContext: () => ({
@@ -41,7 +43,8 @@ vi.mock('@/core/OnboardingFlow/utils/formUtils', () => ({
     }),
   }),
   useGetValidationMessage: () => (key: string) => `${key} is invalid`,
-  useGetFieldContentToken: () => (fieldName: string, tokenId: string) => `${fieldName}.${tokenId}`,
+  useGetFieldContentToken: () => (fieldName: string, tokenId: string) =>
+    `${fieldName}.${tokenId}`,
 }));
 
 vi.mock('@/i18n', () => ({
@@ -50,7 +53,7 @@ vi.mock('@/i18n', () => ({
       if (opts?.defaultValue) return opts.defaultValue;
       return Array.isArray(key) ? key[0] : key;
     },
-    tString: (key: string | string[], opts?: any) =>
+    tString: (key: string | string[], _opts?: any) =>
       Array.isArray(key) ? key[0] : key,
   }),
 }));
@@ -60,8 +63,6 @@ vi.mock('@/components/LearnMorePopover', () => ({
     <div>{children}</div>
   ),
 }));
-
-import { BusinessContactInfoForm } from './BusinessContactInfoForm';
 
 describe('BusinessContactInfoForm', () => {
   const renderForm = () => {

@@ -7,7 +7,7 @@ describe('NAME_PATTERN', () => {
     expect(NAME_PATTERN.test('JohnDoe123')).toBe(true);
   });
 
-  it('matches special characters ()_/@&+%#;,.: \'-', () => {
+  it("matches special characters ()_/@&+%#;,.: '-", () => {
     expect(NAME_PATTERN.test("O'Brien")).toBe(true);
     expect(NAME_PATTERN.test('Smith & Co.')).toBe(true);
     expect(NAME_PATTERN.test('Dept. (Finance)')).toBe(true);

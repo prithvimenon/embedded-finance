@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ClientResponse } from '@/api/generated/smbdo.schemas';
 import type {
   SectionScreenConfig,
   StepConfig,
@@ -10,7 +9,13 @@ import { getFlowProgress, getStepperValidation } from './flowUtils';
 
 describe('getStepperValidation', () => {
   it('returns allStepsValid=true when there are no steps', () => {
-    const result = getStepperValidation([], {}, undefined, undefined, 'gateway');
+    const result = getStepperValidation(
+      [],
+      {},
+      undefined,
+      undefined,
+      'gateway'
+    );
     expect(result.allStepsValid).toBe(true);
     expect(result.stepValidationMap).toEqual({});
   });
@@ -62,7 +67,7 @@ describe('getFlowProgress', () => {
 
   it('marks a section as completed when all steps are valid and no statusResolver', () => {
     const mockSection = {
-      id: 'test-section',
+      id: 'personal-section',
       type: 'component',
       isSection: true,
       sectionConfig: {},
@@ -75,12 +80,12 @@ describe('getFlowProgress', () => {
       undefined,
       'gateway'
     );
-    expect(result.sectionStatuses['test-section']).toBe('completed');
+    expect(result.sectionStatuses['personal-section']).toBe('completed');
   });
 
   it('uses statusResolver when provided', () => {
     const mockSection = {
-      id: 'test-section',
+      id: 'business-section',
       type: 'component',
       isSection: true,
       sectionConfig: {
@@ -95,6 +100,6 @@ describe('getFlowProgress', () => {
       undefined,
       'gateway'
     );
-    expect(result.sectionStatuses['test-section']).toBe('in_progress');
+    expect(result.sectionStatuses['business-section']).toBe('in_progress');
   });
 });
