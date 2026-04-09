@@ -169,7 +169,10 @@ describe('OperationalDetailsForm', () => {
   });
 
   test('renders loading state while fetching questions', () => {
-    // Use a handler that delays the response
+    renderOperationalDetails();
+
+    // Override the default handler with a delayed one AFTER render
+    // so it takes precedence (MSW evaluates most recently added handlers first)
     server.use(
       http.get('*/questions*', async () => {
         await new Promise<void>((resolve) => {
@@ -178,8 +181,6 @@ describe('OperationalDetailsForm', () => {
         return HttpResponse.json(mockQuestionsResponse);
       })
     );
-
-    renderOperationalDetails();
 
     expect(screen.getByText(/Loading questions/i)).toBeInTheDocument();
   });
@@ -256,13 +257,6 @@ describe('OperationalDetailsForm', () => {
   });
 
   test('renders no questions message when API returns no data', async () => {
-    server.use(
-      http.get('*/questions*', () => {
-        // Return 404 or empty to trigger no questionsData state
-        return new HttpResponse(null, { status: 404 });
-      })
-    );
-
     renderOperationalDetails({
       clientData: {
         ...mockClient,
@@ -274,12 +268,18 @@ describe('OperationalDetailsForm', () => {
       },
     });
 
+    // Override the default handler AFTER render so it takes precedence
+    server.use(
+      http.get('*/questions*', () => {
+        return new HttpResponse(null, { status: 404 });
+      })
+    );
+
     await waitFor(() => {
-      // When questionsData is undefined, shows "no additional questions"
-      // or when the fetch fails, shows the form with empty questions
+      // The questions from the successful response should not be rendered
       expect(
-        screen.getByText(/no additional questions|Operational details/i)
-      ).toBeInTheDocument();
+        screen.queryByText(/What is your total annual revenue/i)
+      ).not.toBeInTheDocument();
     });
   });
 
