@@ -144,7 +144,7 @@ describe('BankAccountFormWrapper', () => {
       />
     );
 
-    expect(screen.getByText('Add Recipient')).toBeInTheDocument();
+    expect(screen.getByText('Add New Recipient')).toBeInTheDocument();
   });
 
   it('renders edit header when isEditing is true', () => {
