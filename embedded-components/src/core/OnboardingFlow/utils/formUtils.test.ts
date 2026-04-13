@@ -1,3 +1,4 @@
+import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
@@ -20,7 +21,39 @@ import {
   sanitizeServerErrorMessage,
   setApiFormErrors,
   shapeFormValuesBySchema,
+  useFormWithFilters,
+  useGetValidationMessage,
 } from './formUtils';
+
+// ---------------------------------------------------------------------------
+// Mock context hooks used by useGetValidationMessage / useFormWithFilters
+// ---------------------------------------------------------------------------
+vi.mock('@/core/OnboardingFlow/contexts', () => ({
+  useOnboardingContext: () => ({
+    clientData: undefined,
+    availableProducts: ['EMBEDDED_PAYMENTS'],
+    availableJurisdictions: ['US'],
+    clientGetStatus: 'success' as const,
+    setClientId: vi.fn(),
+    organizationType: undefined,
+  }),
+  useFlowContext: () => ({
+    currentScreenId: 'gateway',
+    goTo: vi.fn(),
+    goBack: vi.fn(),
+    setFlowUnsavedChanges: vi.fn(),
+  }),
+}));
+
+vi.mock('react-hook-form', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-hook-form')>();
+  return {
+    ...actual,
+    useFormContext: () => ({
+      getValues: () => undefined,
+    }),
+  };
+});
 
 // ---------------------------------------------------------------------------
 // getValueByPath
@@ -539,5 +572,126 @@ describe('modifySchemaByClientContext', () => {
     expect(modified).toBeInstanceOf(z.ZodEffects);
     const badResult = modified.safeParse({ organizationName: 'BLOCKED' });
     expect(badResult.success).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useGetValidationMessage (hook)
+// ---------------------------------------------------------------------------
+describe('useGetValidationMessage', () => {
+  it('returns a function', () => {
+    const { result } = renderHook(() => useGetValidationMessage());
+    expect(typeof result.current).toBe('function');
+  });
+
+  it('returns a string message for a known field and key', () => {
+    const { result } = renderHook(() => useGetValidationMessage());
+    const msg = result.current('organizationName' as any, 'required' as any);
+    expect(typeof msg).toBe('string');
+    expect(msg.length).toBeGreaterThan(0);
+  });
+
+  it('returns a string message with count parameter', () => {
+    const { result } = renderHook(() => useGetValidationMessage());
+    const msg = result.current(
+      'organizationName' as any,
+      'maxLength' as any,
+      60
+    );
+    expect(typeof msg).toBe('string');
+  });
+
+  it('returns a string message with extra params', () => {
+    const { result } = renderHook(() => useGetValidationMessage());
+    const msg = result.current(
+      'individualAddress.postalCode' as any,
+      'required' as any,
+      { country: 'US' }
+    );
+    expect(typeof msg).toBe('string');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useFormWithFilters (hook)
+// ---------------------------------------------------------------------------
+describe('useFormWithFilters', () => {
+  it('returns a react-hook-form instance with expected methods', () => {
+    const schema = z.object({
+      organizationName: z.string(),
+    });
+
+    const { result } = renderHook(() =>
+      useFormWithFilters({
+        clientData: undefined,
+        screenId: 'gateway',
+        schema,
+        defaultValues: { organizationName: 'Acme' },
+      })
+    );
+
+    expect(result.current.register).toBeDefined();
+    expect(result.current.handleSubmit).toBeDefined();
+    expect(result.current.formState).toBeDefined();
+    expect(result.current.getValues).toBeDefined();
+  });
+
+  it('applies default values through the filter pipeline', () => {
+    const schema = z.object({
+      organizationName: z.string(),
+    });
+
+    const { result } = renderHook(() =>
+      useFormWithFilters({
+        clientData: undefined,
+        screenId: 'gateway',
+        schema,
+        defaultValues: { organizationName: 'TestCorp' },
+      })
+    );
+
+    expect(result.current.getValues('organizationName')).toBe('TestCorp');
+  });
+
+  it('applies overrideDefaultValues on top of defaults', () => {
+    const schema = z.object({
+      organizationName: z.string(),
+    });
+
+    const { result } = renderHook(() =>
+      useFormWithFilters({
+        clientData: undefined,
+        screenId: 'gateway',
+        schema,
+        defaultValues: { organizationName: 'Original' },
+        overrideDefaultValues: { organizationName: 'Overridden' } as any,
+      })
+    );
+
+    expect(result.current.getValues('organizationName')).toBe('Overridden');
+  });
+
+  it('integrates refineFn into the resolved schema', () => {
+    const schema = z.object({
+      organizationName: z.string(),
+    });
+
+    const refineFn = (s: z.ZodObject<Record<string, z.ZodType<any>>>) =>
+      s.refine((data) => data.organizationName !== 'BLOCKED', {
+        message: 'Blocked',
+      });
+
+    const { result } = renderHook(() =>
+      useFormWithFilters({
+        clientData: undefined,
+        screenId: 'gateway',
+        schema,
+        refineSchemaFn: refineFn,
+        defaultValues: { organizationName: 'OK' },
+      })
+    );
+
+    // The form should be created successfully with refineFn applied
+    expect(result.current.formState).toBeDefined();
   });
 });
